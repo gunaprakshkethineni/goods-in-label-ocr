@@ -48,7 +48,21 @@ pip install -r requirements.txt
 If Tesseract ends up somewhere other than `C:\Program Files\Tesseract-OCR`, change the path at
 the top of `ocr_reader.py`.
 
-## Running it
+## Seeing it work
+
+```
+python make_labels.py --n 60 --seed 7
+python demo.py
+```
+
+`demo.py` runs the whole thing and builds `output/report.html`, then opens it. You get every
+label as a picture next to what the tool read off it, what the answer should have been, and
+whether it decided a person needs to look at that one. Flagged labels come first. The html has
+the pictures baked into it so you can send the file to somebody and it still works.
+
+That is the quickest way to check it is actually doing something rather than printing numbers.
+
+## Running the pieces
 
 ```
 python make_labels.py --n 60 --seed 7
@@ -61,7 +75,10 @@ python check_accuracy.py
 `output/inventory.csv`, `validate.py` splits that into `output/inventory_final.csv` and
 `output/flagged.csv`, and `check_accuracy.py` scores the whole thing against the ground truth.
 
-`python batch_test.py` does the timing run and `python -m pytest` runs the tests.
+`python batch_test.py` does the timing run and `python -m pytest` runs the tests (20 of them).
+
+`python preprocess.py data/labels/label_003.png` writes each stage of the cleanup to
+`output/debug/` so you can see what the OpenCV steps are actually doing one at a time.
 
 ## Where the images come from
 
