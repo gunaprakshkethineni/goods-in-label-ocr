@@ -12,6 +12,7 @@ from pyzbar import pyzbar
 from pyzbar.pyzbar import ZBarSymbol
 
 from preprocess import clean
+from textutil import edit_distance
 
 # pytesseract wont find the exe on windows unless you point it at the install folder
 TESS = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
@@ -63,8 +64,27 @@ def clean_val(rest):
     return val.upper() or None
 
 
-def tag_ok(head, tag):
-    return len(head) == len(tag) and sum(1 for a, b in zip(head, tag) if a != b) <= 1
+# pull the bit before the colon off a line. tesseract loses the colon often enough that i also
+# accept a plain space, so "QTY 149" is read the same as "QTY: 149"
+def split_head(line):
+    if ":" in line:
+        head, rest = line.split(":", 1)
+        return head.strip().upper(), rest
+    parts = line.strip().split(None, 1)
+    if len(parts) == 2:
+        return parts[0].upper(), parts[1]
+    return "", ""
+
+
+# which of the four tags is this misread head closest to. it has to be a clear winner, because
+# PN and SN are one character apart and a misread 5N is exactly as close to one as the other.
+# if it is a tie i would rather find nothing and flag the row than guess and put a serial number
+# in the part number column
+def best_tag(head):
+    d = sorted((edit_distance(head, t), t) for t in TAGS)
+    if len(d) > 1 and d[0][0] == d[1][0]:
+        return None, 99
+    return d[0][1], d[0][0]
 
 
 # find the line starting with a tag like SN and give back what comes after the colon.
@@ -81,25 +101,30 @@ def grab(tag, text):
     lines = text.splitlines()
 
     for line in lines:
-        if ":" in line:
-            head, rest = line.split(":", 1)
-            if head.strip().upper() == tag:
-                return clean_val(rest)
+        head, rest = split_head(line)
+        if head == tag:
+            return clean_val(rest)
 
     for line in lines:
-        if ":" in line:
-            head, rest = line.split(":", 1)
-            h = head.strip().upper()
-            if h in TAGS and h != tag:
-                continue
-            if tag_ok(h, tag):
-                return clean_val(rest)
+        head, rest = split_head(line)
+        if not head or head in TAGS:
+            continue
+        best, dist = best_tag(head)
+        if best == tag and dist <= 1:
+            return clean_val(rest)
 
-    # last resort, the colon went missing entirely
     for line in lines:
         i = line.upper().find(tag)
         if i != -1:
             return clean_val(line[i + len(tag):])
+
+    # quantity is the only field that is a bare number, so if the tag went missing altogether a
+    # line that is nothing but digits is almost certainly it. label_008 came back as just "77"
+    if tag == "QTY":
+        for line in lines:
+            s = line.strip()
+            if s.isdigit():
+                return s
     return None
 
 

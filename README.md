@@ -14,17 +14,19 @@ quicker than checking 60.
 
 | | |
 |---|---|
-| character accuracy | **97.1%** |
-| same thing with the OpenCV step turned off | 59.3% |
-| 10 labels, start to finish | **3.48 s** (348 ms each) |
+| character accuracy | **96.4%** |
+| same thing with the OpenCV step turned off | 59.5% |
+| 10 labels, start to finish | **2.27 s** (227 ms each) |
 | labels needing manual review | **12 of 60, so 80% less checking** |
 | injected defects the validator caught | **7 of 7, none missed** |
 | false alarms | 5 |
 
-The OpenCV preprocessing is worth 37.8 percentage points on its own. That is the number I care
+The OpenCV preprocessing is worth 36.8 percentage points on its own. That is the number I care
 about most, because it is the difference between the tool being useful and being noise.
 
-Exact field matches: part number 56/60, lot 53/60, quantity 55/60, serial 44/60. The serial
+Everything is seeded, so `--seed 7` gives these same numbers on a rerun.
+
+Exact field matches: part number 57/60, quantity 56/60, lot 51/60, serial 45/60. The serial
 looks bad until you remember the barcode also carries it, and Code128 has a check digit while
 OCR has nothing, so when the barcode decodes it overrules the text. In the final inventory the
 serial is right on every row where the barcode read.
@@ -87,9 +89,15 @@ flags were real or not.
 2. median blur, for the speckle
 3. `fastNlMeansDenoising`, for the sensor grain
 4. deskew, using `minAreaRect` on the text pixels
-5. 3x upscale with cubic interpolation
+5. 2x upscale with cubic interpolation
 
 Then Tesseract with `--psm 6` and a character whitelist.
+
+Two settings in there are worth more than they look. `searchWindowSize` on the denoiser defaults
+to 21 and that costs about a second per ten labels on its own, so I dropped it to 9, which made
+the whole thing a third faster and scored slightly better as well. A big search window averages
+over half the label and starts softening the digits. And 3x upscale scores about a point higher
+than 2x but pushes a batch of ten past four seconds, so 2x it is.
 
 ## What validate.py checks
 
@@ -125,8 +133,16 @@ the deskew off on nearly every label. Folding the angle into -45..45 first took 
 
 **Regexes for the fields.** `SN[:\s]*([A-Z0-9]+)` looks fine until Tesseract reads the S of
 SN9332820 as a dollar sign, and then the pattern does not match and the serial is gone
-completely. Same for the tags themselves, QTY comes out as OTY often enough to matter. Going
-line by line and allowing the tag to be one character out fixed it.
+completely. The tags themselves get mangled too. Out of one run I had `OTY 149` with the Q
+misread and the colon gone, `OT:37` with the Y gone as well, and one label where the tag
+vanished entirely and left the line as just `77`. Going line by line, accepting a space instead
+of a colon, and allowing the tag to be one edit out handles the first two. For the third I fall
+back to any line that is nothing but digits, since quantity is the only bare number on the
+label.
+
+The one thing that needs care there is that PN and SN are a single character apart, so a misread
+`5N` is exactly as close to one as the other. When two tags tie I return nothing and let the row
+get flagged, rather than guessing and quietly writing a serial number into the part column.
 
 **Making the barcode bigger.** I assumed thicker bars would survive more damage and they did
 not, wider bars decoded worse. The real problem was that the speckle is applied after the blur,

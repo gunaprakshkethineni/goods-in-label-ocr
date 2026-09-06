@@ -55,7 +55,11 @@ def clean(img, debug=False):
     img = cv2.medianBlur(img, 3)
     steps.append(("2_median", img))
 
-    img = cv2.fastNlMeansDenoising(img, None, h=11, templateWindowSize=7, searchWindowSize=21)
+    # searchWindowSize 21 is the usual default and it is slow, about a second for ten labels on
+    # its own. dropping it to 9 made the whole thing about a third faster AND scored slightly
+    # better, which i did not expect. a big search window averages over half the label and starts
+    # softening the digits
+    img = cv2.fastNlMeansDenoising(img, None, h=11, templateWindowSize=7, searchWindowSize=9)
     steps.append(("3_denoise", img))
 
     img = deskew(img)
@@ -65,7 +69,9 @@ def clean(img, debug=False):
     # thresholding myself cost about 8 points, tesseract does its own binarisation internally
     # and it is better at it than my fixed block size was. so the denoised greyscale goes
     # straight through now
-    img = cv2.resize(img, None, fx=3, fy=3, interpolation=cv2.INTER_CUBIC)
+    # 3x scores about a point and a half higher but pushes a batch of ten past four seconds,
+    # and tesseract time goes up with the pixel count. 2x keeps it comfortably inside
+    img = cv2.resize(img, None, fx=2, fy=2, interpolation=cv2.INTER_CUBIC)
     steps.append(("5_upscale", img))
 
     if debug:
