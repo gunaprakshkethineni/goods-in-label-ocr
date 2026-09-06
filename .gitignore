@@ -1,0 +1,9 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# generated stuff, just run make_labels.py to get it back
+data/labels/
+data/labels_truth.csv
+data/lot_master.csv
+output/
