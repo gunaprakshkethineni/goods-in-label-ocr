@@ -11,8 +11,9 @@ from textutil import edit_distance
 TRUTH_FILE = "data/labels_truth.csv"
 INV_FILE = "output/inventory.csv"
 FLAG_FILE = "output/flagged.csv"
+ACCEPTED_FILE = "output/inventory_final.csv"
 
-FIELDS = ["part_no", "serial", "lot_no", "qty"]
+FIELDS = ["material", "lot_no", "expiry", "qty"]
 
 
 def load_truth():
@@ -72,10 +73,10 @@ def report_flags(truth):
 
     print()
     print("=== flagging quality ===")
-    print("labels i deliberately broke:  ", len(real))
-    print("  of those, flagged:          ", len(caught))
-    print("  of those, missed:           ", len(missed))
-    print("clean labels flagged anyway:  ", len(false_alarms), "(ocr was not confident enough)")
+    print("crates with something really wrong:", len(real))
+    print("  of those, held:                  ", len(caught))
+    print("  of those, let through:           ", len(missed))
+    print("good crates held anyway:           ", len(false_alarms), "(reader was not confident)")
     if flagged:
         print("so %.0f%% of the flags were real defects" % (100.0 * len(caught) / len(flagged)))
 
@@ -86,7 +87,19 @@ def main():
     with open(INV_FILE, newline="") as f:
         rows = list(csv.DictReader(f))
 
-    with_pre = report("with opencv preprocessing", rows, truth)
+    with_pre = report("straight off the ocr", rows, truth)
+
+    # what actually ends up in the system, after the barcode has overruled the printed lot and
+    # the codes have been matched against the master lists. this is the number that matters,
+    # the one above is only the reader on its own
+    repaired = []
+    for p in [ACCEPTED_FILE, FLAG_FILE]:
+        if os.path.exists(p):
+            with open(p, newline="") as f:
+                repaired += list(csv.DictReader(f))
+    if repaired:
+        report("after the master data repairs", repaired, truth)
+
     report_flags(truth)
 
     if "quick" in sys.argv:

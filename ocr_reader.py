@@ -54,7 +54,13 @@ def fix_by_mask(s, mask):
     return "".join(out)
 
 
-TAGS = ["PN", "SN", "LOT", "QTY"]
+TAGS = ["MAT", "LOT", "EXP", "QTY"]
+
+# what shape each field is meant to be, so a character can be repaired when the format says
+# what belongs in that slot. a is a letter, d is a digit, anything else is a literal
+MASKS = {"material": "aaa-aa-dddd",
+         "lot_no": "adddd-dddd",
+         "expiry": "dddd-dd-dd"}
 
 
 def clean_val(rest):
@@ -118,13 +124,19 @@ def grab(tag, text):
         if i != -1:
             return clean_val(line[i + len(tag):])
 
-    # quantity is the only field that is a bare number, so if the tag went missing altogether a
-    # line that is nothing but digits is almost certainly it. label_008 came back as just "77"
+    # quantity is the only field on the label that is a bare number, so if the tag went missing
+    # altogether then a line that is nothing but digits is almost certainly it. one crate came
+    # back as just "77", another as "O:151" with the tag mangled past recognising. the date and
+    # the lot both carry dashes so neither can be mistaken for a quantity here
     if tag == "QTY":
         for line in lines:
-            s = line.strip()
-            if s.isdigit():
-                return s
+            if line.strip().isdigit():
+                return line.strip()
+        for line in lines:
+            if ":" in line:
+                val = line.split(":", 1)[1].strip()
+                if val.isdigit():
+                    return val
     return None
 
 
@@ -148,9 +160,9 @@ def read_image(raw, use_preprocess=True):
     img = clean(raw) if use_preprocess else raw
     text = pytesseract.image_to_string(img, config=TESS_CFG)
 
-    part_no = fix_by_mask(grab("PN", text), "dddd-ad")
-    serial = fix_by_mask(grab("SN", text), "aaddddddd")
-    lot_no = fix_by_mask(grab("LOT", text), "adddd-dddd")
+    material = fix_by_mask(grab("MAT", text), MASKS["material"])
+    lot_no = fix_by_mask(grab("LOT", text), MASKS["lot_no"])
+    expiry = fix_by_mask(grab("EXP", text), MASKS["expiry"])
 
     qty = grab("QTY", text)
     if qty:
@@ -159,9 +171,9 @@ def read_image(raw, use_preprocess=True):
     # barcode always comes off the original. thresholding wrecks the thin bars
     bc = read_barcode(raw)
 
-    return {"part_no": part_no or "",
-            "serial": serial or "",
+    return {"material": material or "",
             "lot_no": lot_no or "",
+            "expiry": expiry or "",
             "qty": qty or "",
             "barcode": bc or "",
             "text": text}
@@ -190,6 +202,9 @@ def read_all(use_preprocess=True, quiet=False):
     return rows
 
 
+COLUMNS = ["filename", "material", "lot_no", "expiry", "qty", "barcode"]
+
+
 if __name__ == "__main__":
     use_pre = "nopre" not in sys.argv
     if not use_pre:
@@ -198,7 +213,7 @@ if __name__ == "__main__":
     rows = read_all(use_pre)
     os.makedirs("output", exist_ok=True)
     with open(OUT_FILE, "w", newline="") as f:
-        w = csv.DictWriter(f, fieldnames=["filename", "part_no", "serial", "lot_no", "qty", "barcode"])
+        w = csv.DictWriter(f, fieldnames=COLUMNS)
         w.writeheader()
         w.writerows(rows)
     print("wrote", len(rows), "rows to", OUT_FILE)

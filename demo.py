@@ -17,14 +17,14 @@ from PIL import Image
 
 from ocr_reader import read_label
 from preprocess import clean
-from validate import check_row, load_approved_lots
+from validate import DEFAULT_BUILD, check_crate, load_rules
 
 IN_DIR = "data/labels"
 TRUTH_FILE = "data/labels_truth.csv"
 OUT_FILE = "output/report.html"
 
-FIELDS = ["part_no", "serial", "lot_no", "qty"]
-NICE = {"part_no": "Part no", "serial": "Serial", "lot_no": "Lot no", "qty": "Qty"}
+FIELDS = ["material", "lot_no", "expiry", "qty"]
+NICE = {"material": "Material", "lot_no": "Lot no", "expiry": "Expires", "qty": "Qty"}
 
 
 # shrink the picture and turn it into a base64 string so the html file works on its own with no
@@ -49,7 +49,7 @@ def load_truth():
 
 def card(row, flags, truth, thumb):
     ok = not flags
-    badge = "PASS" if ok else "NEEDS CHECK"
+    badge = "CLEARED" if ok else "HELD"
     cls = "ok" if ok else "bad"
 
     body = ""
@@ -71,7 +71,7 @@ def card(row, flags, truth, thumb):
     tags = "".join("<span class='flag'>%s</span>" % f for f in flags)
     real = ""
     if truth and truth.get("defects"):
-        real = "<div class='real'>this label was deliberately broken: %s</div>" % truth["defects"]
+        real = "<div class='real'>this crate really was bad: %s</div>" % truth["defects"]
 
     return """
     <div class='card %s'>
@@ -85,23 +85,28 @@ def card(row, flags, truth, thumb):
 
 def main():
     truth = load_truth()
-    approved = load_approved_lots()
+    rules = load_rules()
     files = sorted(glob.glob(os.path.join(IN_DIR, "*.png")))
     if not files:
         print("no labels in", IN_DIR, "- run: python make_labels.py --n 60 --seed 7")
         return
 
-    print("reading", len(files), "labels...")
+    print("reading", len(files), "crates for", DEFAULT_BUILD, "...")
     start = time.perf_counter()
 
     cards = []
     n_flagged = 0
+    issued = []
     for i, path in enumerate(files):
         raw = cv2.imread(path, cv2.IMREAD_GRAYSCALE)
         row = read_label(path)
-        fixed, flags = check_row(row, approved)
+        fixed, flags = check_crate(row, rules, DEFAULT_BUILD, issued)
         if flags:
             n_flagged += 1
+        else:
+            # only what cleared is actually out on the build, so only that counts for the
+            # compatibility check on later crates
+            issued.append({"material": fixed.get("material", ""), "lot_no": fixed.get("lot_no", "")})
         cards.append((bool(flags), card(fixed, flags, truth.get(row["filename"], {}), embed(raw))))
         if (i + 1) % 10 == 0:
             print("  ", i + 1, "of", len(files))
@@ -118,6 +123,7 @@ def main():
     total = len(files)
     passed = total - n_flagged
     html = PAGE % {
+        "build": DEFAULT_BUILD,
         "total": total,
         "passed": passed,
         "flagged": n_flagged,
@@ -134,7 +140,7 @@ def main():
         f.write(html)
 
     print()
-    print("%d labels, %d went straight through, %d need a person" % (total, passed, n_flagged))
+    print("%d crates, %d cleared onto the build, %d held" % (total, passed, n_flagged))
     print("took %.1f s" % took)
     print("report ->", os.path.abspath(OUT_FILE))
     webbrowser.open("file:///" + os.path.abspath(OUT_FILE).replace("\\", "/"))
@@ -182,16 +188,16 @@ PAGE = """<!doctype html>
        border-radius:4px;padding:5px 8px}
 </style></head><body>
 <header>
-  <h1>Factory label reader</h1>
-  <p>Every label the tool read, what it pulled off each one, and which ones it decided a person
-     should look at. Flagged labels are shown first.</p>
+  <h1>Material intake &middot; %(build)s</h1>
+  <p>Every crate booked in for this blade, what came off the label, and which ones were held back
+     before the material could go anywhere near the mould. Held crates are shown first.</p>
 </header>
 <div class='stats'>
-  <div class='stat'><b>%(total)d</b><span>labels read</span></div>
-  <div class='stat'><b>%(passed)d</b><span>straight through</span></div>
-  <div class='stat'><b>%(flagged)d</b><span>need a person</span></div>
+  <div class='stat'><b>%(total)d</b><span>crates booked in</span></div>
+  <div class='stat'><b>%(passed)d</b><span>cleared to the build</span></div>
+  <div class='stat'><b>%(flagged)d</b><span>held for a person</span></div>
   <div class='stat'><b>%(pct).0f%%</b><span>less checking</span></div>
-  <div class='stat'><b>%(per).0f ms</b><span>per label</span></div>
+  <div class='stat'><b>%(per).0f ms</b><span>per crate</span></div>
 </div>
 <div class='pp'>
   <h2>What the OpenCV step does</h2>
@@ -201,7 +207,7 @@ PAGE = """<!doctype html>
   </div>
 </div>
 <div class='wrap'>
-  <div class='grid-title'>Every label</div>
+  <div class='grid-title'>Every crate</div>
   <div class='grid'>%(cards)s</div>
 </div>
 </body></html>

@@ -3,102 +3,126 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from validate import check_row, chars_off
+from validate import check_crate, snap
 
-APPROVED = {"L2024-0917", "L2023-3944"}
-
-
-def good_row():
-    return {"filename": "x.png", "part_no": "4471-B2", "serial": "SN8830471",
-            "lot_no": "L2024-0917", "qty": "25", "barcode": "SN8830471"}
-
-
-def flags_for(r):
-    return check_row(r, APPROVED)[1]
-
-
-def test_clean_row_has_no_flags():
-    assert flags_for(good_row()) == []
-
-
-def test_missing_barcode_is_flagged():
-    r = good_row()
-    r["barcode"] = ""
-    assert "BARCODE_UNREADABLE" in flags_for(r)
-
-
-def test_barcode_not_matching_serial():
-    r = good_row()
-    r["barcode"] = "SN0000001"
-    assert "SERIAL_MISMATCH" in flags_for(r)
+# a small stand-in for data/material_master.csv and friends
+RULES = {
+    "lots": {
+        "L2024-0917": {"material": "RES-EP-2400", "supplier": "VESTRA POLYMERS",
+                       "released": True, "expiry": "2099-01-01"},
+        "L2024-0918": {"material": "HRD-AM-1150", "supplier": "AXIOM RESINS",
+                       "released": True, "expiry": "2099-01-01"},
+        "L2024-0919": {"material": "HRD-AM-1180", "supplier": "AXIOM RESINS",
+                       "released": True, "expiry": "2099-01-01"},
+        "L2023-1111": {"material": "RES-EP-2400", "supplier": "VESTRA POLYMERS",
+                       "released": True, "expiry": "2020-01-01"},
+        "L2023-2222": {"material": "RES-EP-2400", "supplier": "VESTRA POLYMERS",
+                       "released": False, "expiry": "2099-01-01"},
+        "L2024-7777": {"material": "FAB-GF-1200", "supplier": "CARBOLINE FIBRES",
+                       "released": True, "expiry": "2099-01-01"},
+    },
+    "spec": {"BLADE-402": {"RES-EP-2400", "RES-EP-2600", "HRD-AM-1150", "HRD-AM-1180",
+                           "FAB-CF-0600", "ADH-MA-0320", "FST-ST-0880"}},
+    "compat": {"RES-EP-2400": "HRD-AM-1150", "RES-EP-2600": "HRD-AM-1180"},
+    "materials": ["ADH-MA-0320", "FAB-CF-0600", "FAB-GF-1200", "FST-ST-0880",
+                  "HRD-AM-1150", "HRD-AM-1180", "RES-EP-2400", "RES-EP-2600"],
+}
 
 
-def test_barcode_wins_over_a_misread_serial():
-    # ocr got the serial wrong but the barcode decoded, so it should be repaired and not flagged
-    r = good_row()
-    r["serial"] = "5N883O471"
-    fixed, flags = check_row(r, APPROVED)
-    assert fixed["serial"] == "SN8830471"
+def crate(**kw):
+    row = {"filename": "x.png", "material": "RES-EP-2400", "lot_no": "L2024-0917",
+           "expiry": "2099-01-01", "qty": "200", "barcode": "L2024-0917"}
+    row.update(kw)
+    return row
+
+
+def flags_for(row, issued=()):
+    return check_crate(row, RULES, "BLADE-402", issued)[1]
+
+
+def test_a_good_crate_goes_straight_through():
+    assert flags_for(crate()) == []
+
+
+def test_unreadable_barcode_is_held():
+    assert "BARCODE_UNREADABLE" in flags_for(crate(barcode=""))
+
+
+def test_barcode_overrules_a_misread_lot():
+    # the printed lot came out wrong but the barcode decoded, so it is repaired, not held
+    row, flags = check_crate(crate(lot_no="L2O24-O917"), RULES, "BLADE-402")
+    assert row["lot_no"] == "L2024-0917"
     assert flags == []
 
 
-def test_lot_not_on_approved_list():
-    r = good_row()
-    r["lot_no"] = "L2025-1234"
-    assert "LOT_MISMATCH" in flags_for(r)
+def test_printed_lot_disagreeing_with_the_barcode_is_reported():
+    assert "LOT_MISMATCH_ON_LABEL" in flags_for(crate(lot_no="L2024-0918"))
 
 
-def test_lot_one_character_off_is_snapped():
-    r = good_row()
-    r["lot_no"] = "L2024-0917".replace("9", "8")   # L2024-0817, one digit out
-    fixed, flags = check_row(r, APPROVED)
-    assert fixed["lot_no"] == "L2024-0917"
-    assert flags == []
+def test_lot_nobody_has_booked_in():
+    assert "LOT_NOT_IN_MASTER" in flags_for(crate(lot_no="L2024-5555", barcode="L2024-5555"))
 
 
-def test_lot_with_broken_format():
-    r = good_row()
-    r["lot_no"] = "LZOZ4-O9I7"
-    flags = flags_for(r)
-    assert "LOT_FORMAT_BAD" in flags
-    # a badly formatted lot shouldnt also get reported as a mismatch, thats the same problem twice
-    assert "LOT_MISMATCH" not in flags
+def test_lot_quality_have_not_released():
+    assert "LOT_NOT_RELEASED" in flags_for(
+        crate(lot_no="L2023-2222", barcode="L2023-2222"))
 
 
-def test_missing_serial_with_no_barcode():
-    r = good_row()
-    r["serial"] = ""
-    r["barcode"] = ""
-    assert "FIELD_MISSING:serial" in flags_for(r)
+def test_out_of_date_lot():
+    assert "EXPIRED" in flags_for(crate(lot_no="L2023-1111", barcode="L2023-1111"))
 
 
-def test_qty_out_of_range():
-    r = good_row()
-    r["qty"] = "9999"
-    assert "QTY_OUT_OF_RANGE" in flags_for(r)
+def test_material_not_called_for_on_this_blade():
+    # glass fabric turning up for a carbon blade
+    assert "NOT_ON_BUILD_SPEC" in flags_for(
+        crate(material="FAB-GF-1200", lot_no="L2024-7777", barcode="L2024-7777"))
 
 
-def test_chars_off():
-    assert chars_off("L2024-0917", "L2024-0918") == 1
-    assert chars_off("L2024-0917", "L2024-0917") == 0
-    assert chars_off("L2024-0917", "L2024-0928") == 2
-    assert chars_off("L2024-0917", "L2024-091") == 1     # dropped a digit
-    assert chars_off("L2024-0917", "L2024-09177") == 1   # gained one
+def test_the_label_says_one_thing_and_the_master_says_another():
+    # that lot is a hardener, whatever the drum is labelled
+    flags = flags_for(crate(material="RES-EP-2400", lot_no="L2024-0918",
+                            barcode="L2024-0918"))
+    assert "LABEL_MATERIAL_MISMATCH" in flags
 
 
-def test_lot_with_a_dropped_digit_is_snapped():
-    r = good_row()
-    r["lot_no"] = "L2024-091"
-    fixed, flags = check_row(r, APPROVED)
-    assert fixed["lot_no"] == "L2024-0917"
-    assert flags == []
+def test_hardener_from_the_wrong_resin_system_is_caught():
+    # system A resin is already out on this build, so the system B hardener must not go near it.
+    # nothing is wrong with either drum on its own, only with the pair
+    issued = [{"material": "RES-EP-2400", "lot_no": "L2024-0917"}]
+    flags = flags_for(crate(material="HRD-AM-1180", lot_no="L2024-0919",
+                            barcode="L2024-0919"), issued)
+    assert any(f.startswith("INCOMPATIBLE_WITH_ISSUED") for f in flags)
 
 
-def test_lot_close_to_two_approved_lots_is_not_snapped():
-    # cannot tell which one it was meant to be, so a human gets it
-    approved = {"L2024-0917", "L2024-0918"}
-    r = good_row()
-    r["lot_no"] = "L2024-0919"
-    fixed, flags = check_row(r, approved)
-    assert fixed["lot_no"] == "L2024-0919"
-    assert "LOT_MISMATCH" in flags
+def test_the_matching_hardener_is_fine():
+    issued = [{"material": "RES-EP-2400", "lot_no": "L2024-0917"}]
+    assert flags_for(crate(material="HRD-AM-1150", lot_no="L2024-0918",
+                           barcode="L2024-0918"), issued) == []
+
+
+def test_a_hardener_on_its_own_is_fine():
+    # with no resin issued yet there is nothing to be incompatible with
+    assert flags_for(crate(material="HRD-AM-1180", lot_no="L2024-0919",
+                           barcode="L2024-0919")) == []
+
+
+def test_silly_quantity():
+    assert "QTY_OUT_OF_RANGE" in flags_for(crate(qty="9999"))
+
+
+def test_missing_quantity():
+    assert "FIELD_MISSING:qty" in flags_for(crate(qty=""))
+
+
+def test_snap_repairs_a_dropped_digit():
+    # HRD-AM-115 for HRD-AM-1150 is the single most common thing the ocr does to a material code
+    assert snap("HRD-AM-115", RULES["materials"]) == "HRD-AM-1150"
+
+
+def test_snap_refuses_when_two_are_equally_close():
+    # cannot tell which was meant, so leave it alone and let the row get held
+    assert snap("HRD-AM-11X0", ["HRD-AM-1150", "HRD-AM-1180"]) == "HRD-AM-11X0"
+
+
+def test_snap_leaves_something_far_off_alone():
+    assert snap("ZZZ-ZZ-9999", RULES["materials"]) == "ZZZ-ZZ-9999"
