@@ -20,8 +20,15 @@ def deskew(img):
         return img
 
     angle = cv2.minAreaRect(pts)[-1]
+
+    # minAreaRect does not agree with itself across opencv versions, mine hands back angles in
+    # (-90, 0] so a label that is only 1.3 degrees off comes through as -88.7. i was checking
+    # abs(angle) > 10 and bailing out, which quietly turned the deskew off on nearly every label.
+    # fold it into -45..45 first and it means what you expect
     if angle > 45:
         angle = angle - 90
+    elif angle < -45:
+        angle = angle + 90
 
     # anything bigger than this is probably minAreaRect latching onto the border, dont trust it
     if abs(angle) > 10:
@@ -29,8 +36,11 @@ def deskew(img):
 
     h, w = img.shape
     m = cv2.getRotationMatrix2D((w // 2, h // 2), angle, 1.0)
+    # fill the corners with white, NOT replicate. replicate smears the black border line of the
+    # label into big black wedges and tesseract then returns basically nothing for the whole image.
+    # cost me a while to find because the cleaned picture still looks fine to a human
     return cv2.warpAffine(img, m, (w, h), flags=cv2.INTER_CUBIC,
-                          borderMode=cv2.BORDER_REPLICATE)
+                          borderMode=cv2.BORDER_CONSTANT, borderValue=255)
 
 
 def clean(img, debug=False):
@@ -51,18 +61,12 @@ def clean(img, debug=False):
     img = deskew(img)
     steps.append(("4_deskew", img))
 
-    # adaptive not otsu. otsu kept blowing out the shadowed corner into solid black
-    img = cv2.adaptiveThreshold(img, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
-                                cv2.THRESH_BINARY, 35, 15)
-    steps.append(("5_thresh", img))
-
-    kernel = np.ones((2, 2), np.uint8)
-    img = cv2.morphologyEx(img, cv2.MORPH_OPEN, kernel)
-    steps.append(("6_open", img))
-
-    # tesseract is noticeably better on bigger text, this was worth about 3 percent on its own
-    img = cv2.resize(img, None, fx=2, fy=2, interpolation=cv2.INTER_CUBIC)
-    steps.append(("7_upscale", img))
+    # i had an adaptive threshold and a morphology open here and both of them made it WORSE.
+    # thresholding myself cost about 8 points, tesseract does its own binarisation internally
+    # and it is better at it than my fixed block size was. so the denoised greyscale goes
+    # straight through now
+    img = cv2.resize(img, None, fx=3, fy=3, interpolation=cv2.INTER_CUBIC)
+    steps.append(("5_upscale", img))
 
     if debug:
         os.makedirs(DEBUG_DIR, exist_ok=True)
