@@ -29,20 +29,36 @@ rows to find the wrong ones.
 
 Reading the label is the easy half. Once it has the fields it cross-examines them:
 
-| Check | What it catches |
-|---|---|
-| `BARCODE_UNREADABLE` | zbar got nothing off the crate |
-| `LOT_MISMATCH_ON_LABEL` | printed lot and barcode disagree |
-| `LOT_NOT_IN_MASTER` | a lot nobody ever booked in |
-| `LOT_NOT_RELEASED` | quality have not signed that lot off yet |
-| `EXPIRED` | past its shelf life |
-| `LABEL_MATERIAL_MISMATCH` | the drum is labelled as one material, the master says that lot is another |
-| `NOT_ON_BUILD_SPEC` | glass fabric turning up for a carbon blade |
-| `INCOMPATIBLE_WITH_ISSUED` | system B hardener, when system A resin is already out on this build |
-| `MATERIAL_FORMAT_BAD`, `LOT_FORMAT_BAD`, `FIELD_MISSING`, `QTY_OUT_OF_RANGE` | the reader was not confident |
+| Check | What it catches | Outcome |
+|---|---|---|
+| `LOT_NOT_IN_MASTER` | a lot nobody ever booked in | rejected |
+| `LOT_NOT_RELEASED` | quality have not signed that lot off yet | rejected |
+| `EXPIRED` | past its shelf life | rejected |
+| `LABEL_MATERIAL_MISMATCH` | drum labelled as one material, the master says that lot is another | rejected |
+| `NOT_ON_BUILD_SPEC` | glass fabric turning up for a carbon blade | rejected |
+| `INCOMPATIBLE_WITH_ISSUED` | system B hardener, when system A resin is already out on this build | rejected |
+| `BARCODE_UNREADABLE` | zbar got nothing off the crate | held |
+| `LOT_MISMATCH_ON_LABEL` | printed lot and barcode disagree | held |
+| `MATERIAL_FORMAT_BAD`, `LOT_FORMAT_BAD`, `FIELD_MISSING`, `QTY_*` | the reader was not confident | held |
+| `LOT_ALREADY_BOOKED_IN` | that lot has been through this session already | held |
 
-The last one is the point. When the reader is unsure it says so instead of guessing, and that
-crate goes to a person. Everything else books itself in.
+## Three outcomes, not two
+
+A crate comes out as **accepted**, **held** or **rejected**, and they go to different people.
+
+**Accepted** books itself in and nobody looks at it. **Held** means the reader was not sure what
+it was looking at, so somebody walks over, reads the drum with their own eyes and types it in;
+the crate is probably fine. **Rejected** means the reading was solid and the material is
+genuinely wrong for this build, so it does not go near the mould, it goes back to the supplier.
+
+Which one you get is not just a matter of severity. **You cannot reject a crate on a reading you
+do not trust.** If the barcode would not scan and the lot then looks unknown, the honest answer
+is not "reject, unknown lot", it is "I could not read this, someone come and look" - because the
+unknown lot might just be the misreading talking. So anything the reader was unsure about is held
+even when it also looks non-conforming.
+
+On the 60 crate batch that splits 52 / 3 / 5, and the five rejects are exactly the five crates
+with something really wrong with them, one of each kind.
 
 ## Results on my machine
 
@@ -54,9 +70,12 @@ crate goes to a person. Everything else books itself in.
 | same thing with the OpenCV step turned off | 45.6% |
 | after the barcode and master data repairs | **99.8%** |
 | 10 crates, start to finish | **2.40 s** (240 ms each) |
-| crates needing a person | **8 of 60, so 86.7% less checking** |
+| accepted, booked straight in | **52 of 60** |
+| held, somebody re-reads the drum | 3 |
+| rejected, wrong material for this build | 5 |
+| so manual checking down | **86.7%** |
 | real defects caught | **7 of 7, none let through** |
-| good crates held anyway | 1 |
+| good crates stopped anyway | 1 |
 
 The OpenCV preprocessing is worth **53.3 percentage points** on its own. That is the number I care
 about most, because it is the difference between the tool being useful and being noise.
@@ -92,11 +111,14 @@ python app.py
 ```
 
 Then http://localhost:5000. Pick the blade you are building at the top, then either drop crate
-photos in or turn the camera on and hold labels up to it. You get the material, lot, expiry and
-quantity, whether it cleared or was held, and why.
+photos in or turn the camera on and hold labels up to it. You can drop several photos at once.
+You get the material, lot, expiry and quantity, whether it was accepted, held or rejected, and
+why, plus the before and after of the OpenCV step and the raw text Tesseract handed back.
 
-Underneath is the running log of the shift, with counters and a Save CSV button. **Add the 60
-batch crates** drops the whole batch run into the same log.
+Underneath is the running log of the shift. It starts with the last batch run already loaded, so
+the desk is not empty when you open it. The four counters double as filters, so clicking
+**rejected** shows just those five crates and what was wrong with each. Save CSV writes the lot
+to `output/session_scans.csv`.
 
 The thing worth demoing is the blade selector. Scan a carbon fabric crate against BLADE-402 and
 it clears. Switch to BLADE-518, which is the glass layup, scan the same crate, and it is held on
@@ -124,7 +146,7 @@ python check_accuracy.py                 # score it against the ground truth
 ```
 
 `python validate.py BLADE-518` checks the same crates against the other blade.
-`python batch_test.py` does the timing run, `python -m pytest` runs the tests (26 of them), and
+`python batch_test.py` does the timing run, `python -m pytest` runs the tests (31 of them), and
 `python preprocess.py data/labels/crate_003.png` dumps each stage of the cleanup to
 `output/debug/`.
 

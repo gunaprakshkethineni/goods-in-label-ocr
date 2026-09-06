@@ -17,7 +17,7 @@ from PIL import Image
 
 from ocr_reader import read_label
 from preprocess import clean
-from validate import DEFAULT_BUILD, check_crate, load_rules
+from validate import NONCONFORMING, DEFAULT_BUILD, check_crate, load_rules, outcome
 
 IN_DIR = "data/labels"
 TRUTH_FILE = "data/labels_truth.csv"
@@ -48,9 +48,8 @@ def load_truth():
 
 
 def card(row, flags, truth, thumb):
-    ok = not flags
-    badge = "CLEARED" if ok else "HELD"
-    cls = "ok" if ok else "bad"
+    status = outcome(flags)
+    cls = status.lower()
 
     body = ""
     for k in FIELDS:
@@ -68,7 +67,8 @@ def card(row, flags, truth, thumb):
     body += "<tr><th>Barcode</th><td class='val'>%s</td><td>%s</td></tr>" % (
         bc if bc else "-", "" if bc else "<span class='cross'>could not decode</span>")
 
-    tags = "".join("<span class='flag'>%s</span>" % f for f in flags)
+    tags = "".join("<span class='flag %s'>%s</span>"
+                   % ("stop" if f.split(":")[0] in NONCONFORMING else "warn", f) for f in flags)
     real = ""
     if truth and truth.get("defects"):
         real = "<div class='real'>this crate really was bad: %s</div>" % truth["defects"]
@@ -80,7 +80,7 @@ def card(row, flags, truth, thumb):
       <table>%s</table>
       <div class='flags'>%s</div>
       %s
-    </div>""" % (cls, row["filename"], cls, badge, thumb, body, tags, real)
+    </div>""" % (cls, row["filename"], cls, status, thumb, body, tags, real)
 
 
 def main():
@@ -95,39 +95,40 @@ def main():
     start = time.perf_counter()
 
     cards = []
-    n_flagged = 0
+    tally = {"ACCEPTED": 0, "HELD": 0, "REJECTED": 0}
     issued = []
     for i, path in enumerate(files):
         raw = cv2.imread(path, cv2.IMREAD_GRAYSCALE)
         row = read_label(path)
         fixed, flags = check_crate(row, rules, DEFAULT_BUILD, issued)
-        if flags:
-            n_flagged += 1
-        else:
+        tally[outcome(flags)] += 1
+        if not flags:
             # only what cleared is actually out on the build, so only that counts for the
             # compatibility check on later crates
             issued.append({"material": fixed.get("material", ""), "lot_no": fixed.get("lot_no", "")})
-        cards.append((bool(flags), card(fixed, flags, truth.get(row["filename"], {}), embed(raw))))
+        cards.append((outcome(flags), card(fixed, flags, truth.get(row["filename"], {}), embed(raw))))
         if (i + 1) % 10 == 0:
             print("  ", i + 1, "of", len(files))
 
     took = time.perf_counter() - start
 
-    # flagged ones first, they are the interesting half of the demo
-    cards.sort(key=lambda c: not c[0])
+    # rejected first, then held, then the boring ones. the top of the page should be the crates
+    # that would have gone into a blade if nobody was looking
+    order = {"REJECTED": 0, "HELD": 1, "ACCEPTED": 2}
+    cards.sort(key=lambda c: order[c[0]])
 
     sample = cv2.imread(files[0], cv2.IMREAD_GRAYSCALE)
     before = embed(sample, 420)
     after = embed(clean(sample), 420)
 
     total = len(files)
-    passed = total - n_flagged
     html = PAGE % {
         "build": DEFAULT_BUILD,
         "total": total,
-        "passed": passed,
-        "flagged": n_flagged,
-        "pct": 100.0 * passed / total,
+        "accepted": tally["ACCEPTED"],
+        "held": tally["HELD"],
+        "rejected": tally["REJECTED"],
+        "pct": 100.0 * tally["ACCEPTED"] / total,
         "secs": took,
         "per": 1000 * took / total,
         "before": before,
@@ -140,7 +141,8 @@ def main():
         f.write(html)
 
     print()
-    print("%d crates, %d cleared onto the build, %d held" % (total, passed, n_flagged))
+    print("%d crates -> %d accepted, %d held, %d rejected"
+          % (total, tally["ACCEPTED"], tally["HELD"], tally["REJECTED"]))
     print("took %.1f s" % took)
     print("report ->", os.path.abspath(OUT_FILE))
     webbrowser.open("file:///" + os.path.abspath(OUT_FILE).replace("\\", "/"))
@@ -168,12 +170,15 @@ PAGE = """<!doctype html>
  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(370px,1fr));gap:16px}
  .card{background:#fff;border:1px solid #dfe3e8;border-radius:9px;padding:14px;
        border-left:4px solid #2e9e5b}
- .card.bad{border-left-color:#d4472e}
+ .card.held{border-left-color:#d99400}
+ .card.rejected{border-left-color:#d4472e}
+ .stat b.a{color:#1d7541} .stat b.h{color:#8a5a00} .stat b.r{color:#a8331c}
  .head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
  .name{font-family:Consolas,monospace;font-size:12px;color:#6b7480}
  .badge{font-size:11px;font-weight:700;padding:3px 9px;border-radius:11px;letter-spacing:.3px}
- .badge.ok{background:#e3f5ea;color:#1d7541}
- .badge.bad{background:#fbe6e1;color:#a8331c}
+ .badge.accepted{background:#e3f5ea;color:#1d7541}
+ .badge.held{background:#fdf3e0;color:#8a5a00}
+ .badge.rejected{background:#fbe6e1;color:#a8331c}
  .card img{width:100%%;border:1px solid #e3e7ec;border-radius:5px;display:block}
  table{width:100%%;border-collapse:collapse;margin-top:10px;font-size:13px}
  th{text-align:left;font-weight:600;color:#6b7480;padding:3px 0;width:74px;font-size:12px}
@@ -182,20 +187,23 @@ PAGE = """<!doctype html>
  .tick{color:#2e9e5b;font-size:11px}
  .cross{color:#d4472e;font-size:11px}
  .flags{margin-top:9px}
- .flag{display:inline-block;background:#fbe6e1;color:#a8331c;font-size:10.5px;
-       font-family:Consolas,monospace;padding:2px 7px;border-radius:4px;margin:2px 3px 0 0}
+ .flag{display:inline-block;font-size:10.5px;font-family:Consolas,monospace;
+       padding:2px 7px;border-radius:4px;margin:2px 3px 0 0}
+ .flag.stop{background:#fbe6e1;color:#a8331c}
+ .flag.warn{background:#fdf3e0;color:#8a5a00}
  .real{margin-top:7px;font-size:11.5px;color:#8a6d1f;background:#fdf6e3;
        border-radius:4px;padding:5px 8px}
 </style></head><body>
 <header>
   <h1>Material intake &middot; %(build)s</h1>
-  <p>Every crate booked in for this blade, what came off the label, and which ones were held back
-     before the material could go anywhere near the mould. Held crates are shown first.</p>
+  <p>Every crate booked in for this blade, what came off the label, and what happened to it.
+     Rejected first, then held, then the ones that went through on their own.</p>
 </header>
 <div class='stats'>
   <div class='stat'><b>%(total)d</b><span>crates booked in</span></div>
-  <div class='stat'><b>%(passed)d</b><span>cleared to the build</span></div>
-  <div class='stat'><b>%(flagged)d</b><span>held for a person</span></div>
+  <div class='stat'><b class='a'>%(accepted)d</b><span>accepted</span></div>
+  <div class='stat'><b class='h'>%(held)d</b><span>held, re-read it</span></div>
+  <div class='stat'><b class='r'>%(rejected)d</b><span>rejected, wrong material</span></div>
   <div class='stat'><b>%(pct).0f%%</b><span>less checking</span></div>
   <div class='stat'><b>%(per).0f ms</b><span>per crate</span></div>
 </div>

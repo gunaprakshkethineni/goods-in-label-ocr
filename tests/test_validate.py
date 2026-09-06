@@ -3,7 +3,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from validate import check_crate, snap
+from validate import check_crate, outcome, snap
 
 # a small stand-in for data/material_master.csv and friends
 RULES = {
@@ -126,3 +126,30 @@ def test_snap_refuses_when_two_are_equally_close():
 
 def test_snap_leaves_something_far_off_alone():
     assert snap("ZZZ-ZZ-9999", RULES["materials"]) == "ZZZ-ZZ-9999"
+
+
+def test_a_clean_crate_is_accepted():
+    assert outcome([]) == "ACCEPTED"
+
+
+def test_a_reading_we_do_not_trust_is_held():
+    assert outcome(["BARCODE_UNREADABLE"]) == "HELD"
+    assert outcome(["FIELD_MISSING:qty"]) == "HELD"
+
+
+def test_a_solid_reading_of_the_wrong_material_is_rejected():
+    assert outcome(["NOT_ON_BUILD_SPEC"]) == "REJECTED"
+    assert outcome(["EXPIRED"]) == "REJECTED"
+    assert outcome(["INCOMPATIBLE_WITH_ISSUED:L2024-0917"]) == "REJECTED"
+
+
+def test_you_cannot_reject_on_a_reading_you_do_not_trust():
+    # the lot looks unknown, but the barcode did not decode so the lot came off the ocr and the
+    # ocr might simply have got it wrong. that is a person's call, not a rejection
+    assert outcome(["BARCODE_UNREADABLE", "LOT_NOT_IN_MASTER"]) == "HELD"
+
+
+def test_the_whole_batch_splits_three_ways():
+    # a crate that is genuinely wrong AND read cleanly is the only thing that gets rejected
+    assert outcome(["LOT_NOT_RELEASED"]) == "REJECTED"
+    assert outcome(["LOT_MISMATCH_ON_LABEL", "LOT_NOT_RELEASED"]) == "HELD"

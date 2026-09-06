@@ -35,6 +35,38 @@ SNAP_MAX = 2
 
 COLUMNS = ["filename", "material", "lot_no", "expiry", "qty", "barcode"]
 
+# a crate comes out of here as one of three things, and they go to different people.
+#
+# ACCEPTED books itself in and nobody looks at it.
+# HELD means the reader was not sure what it was looking at. somebody walks over, reads the drum
+#   with their own eyes and types it in. the crate is probably fine.
+# REJECTED means the reading was solid and the material is genuinely wrong for this build. that
+#   crate does not go near the mould, it goes back to the supplier or into quarantine.
+#
+# which one you get is not just a matter of severity. you cannot reject a crate on a reading you
+# do not trust, so anything the reader was unsure about is HELD even if it also looks
+# non-conforming, because the non-conformance might just be the misreading talking
+# LOT_ALREADY_BOOKED_IN only ever comes from app.py, but it belongs here with the rest so the
+# batch tool and the desk agree on what a status means
+UNSURE = {"BARCODE_UNREADABLE", "LOT_MISMATCH_ON_LABEL", "LOT_FORMAT_BAD",
+          "MATERIAL_FORMAT_BAD", "FIELD_MISSING", "QTY_FORMAT_BAD", "QTY_OUT_OF_RANGE",
+          "LOT_ALREADY_BOOKED_IN"}
+
+NONCONFORMING = {"LOT_NOT_IN_MASTER", "LOT_NOT_RELEASED", "EXPIRED", "LABEL_MATERIAL_MISMATCH",
+                 "NOT_ON_BUILD_SPEC", "INCOMPATIBLE_WITH_ISSUED"}
+
+
+def base(flag):
+    return flag.split(":")[0]
+
+
+def outcome(flags):
+    if any(base(f) in UNSURE for f in flags):
+        return "HELD"
+    if any(base(f) in NONCONFORMING for f in flags):
+        return "REJECTED"
+    return "ACCEPTED"
+
 
 def load_rules():
     lots = {}
@@ -192,23 +224,27 @@ def main():
     accepted = []
     issued = []
     counts = {}
+    tally = {"ACCEPTED": 0, "HELD": 0, "REJECTED": 0}
     for r in rows:
         fixed, flags = check_crate(r, rules, work_order, issued)
-        if flags:
-            fixed["flags"] = ";".join(flags)
+        status = outcome(flags)
+        fixed["status"] = status
+        fixed["flags"] = ";".join(flags)
+        tally[status] += 1
+
+        if status == "ACCEPTED":
+            accepted.append(fixed)
+            # only what actually cleared is out on the build, so only that counts against the
+            # next crate's compatibility check
+            issued.append({"material": fixed.get("material", ""), "lot_no": fixed.get("lot_no", "")})
+        else:
             flagged.append(fixed)
             for fl in flags:
-                key = fl.split(":")[0]
-                counts[key] = counts.get(key, 0) + 1
-        else:
-            accepted.append(fixed)
-            # only what actually passed counts as out on the build
-            issued.append({"material": fixed.get("material", ""), "lot_no": fixed.get("lot_no", "")})
+                counts[base(fl)] = counts.get(base(fl), 0) + 1
 
     os.makedirs("output", exist_ok=True)
-    cols = COLUMNS + ["flags"]
     with open(OUT_FILE, "w", newline="") as f:
-        w = csv.DictWriter(f, fieldnames=cols, extrasaction="ignore")
+        w = csv.DictWriter(f, fieldnames=COLUMNS + ["status", "flags"], extrasaction="ignore")
         w.writeheader()
         w.writerows(flagged)
 
@@ -218,22 +254,26 @@ def main():
         w.writerows(accepted)
 
     total = len(rows)
-    bad = len(flagged)
-    clean_n = total - bad
-    pct = 100.0 * clean_n / total if total else 0
+    touched = tally["HELD"] + tally["REJECTED"]
+    pct = 100.0 * tally["ACCEPTED"] / total if total else 0
 
     print()
-    print("--- why crates were held ---")
+    print("--- why crates did not go straight through ---")
     for k in sorted(counts, key=lambda x: -counts[x]):
-        print("  %-26s %d" % (k, counts[k]))
+        where = "held" if k in UNSURE else "rejected"
+        print("  %-26s %d   (%s)" % (k, counts[k], where))
 
     print()
-    print(total, "crates booked in")
-    print(bad, "held for a person")
-    print("%d went straight onto the build -> manual checking down %.1f%%" % (clean_n, pct))
+    print("%d crates booked in for %s" % (total, work_order))
+    print("  ACCEPTED %3d   booked straight in, nobody looks at them" % tally["ACCEPTED"])
+    print("  HELD     %3d   reader was not sure, somebody re-reads the drum" % tally["HELD"])
+    print("  REJECTED %3d   reading was solid and the material is wrong for this build"
+          % tally["REJECTED"])
     print()
-    print("cleared ->", ACCEPTED_FILE)
-    print("held    ->", OUT_FILE)
+    print("%d of %d needed a person -> manual checking down %.1f%%" % (touched, total, pct))
+    print()
+    print("accepted ->", ACCEPTED_FILE)
+    print("the rest ->", OUT_FILE)
 
 
 if __name__ == "__main__":
