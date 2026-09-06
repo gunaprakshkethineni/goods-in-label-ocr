@@ -48,7 +48,24 @@ pip install -r requirements.txt
 If Tesseract ends up somewhere other than `C:\Program Files\Tesseract-OCR`, change the path at
 the top of `ocr_reader.py`.
 
-## Seeing it work
+## Scanning one label
+
+```
+python app.py
+```
+
+Then go to http://localhost:5000. Two tabs. One takes a photo you drop on it and shows what came
+off it. The other turns the camera on, and with auto scan running it reads whatever you hold up
+about once a second.
+
+Either way you get the four fields, the barcode, whether it passed or needs a person, and why.
+The upload tab also shows the before and after of the OpenCV step, and both tabs will show you
+the raw text Tesseract handed back if you open the little arrow at the bottom.
+
+Hold the label flat on so it fills the frame. Printing a generated label or showing one on a
+phone screen scans best.
+
+## Seeing all of them at once
 
 ```
 python make_labels.py --n 60 --seed 7

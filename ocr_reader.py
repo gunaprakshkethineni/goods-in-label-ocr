@@ -142,11 +142,9 @@ def read_barcode(img):
     return None
 
 
-def read_label(path, use_preprocess=True):
-    raw = cv2.imread(path, cv2.IMREAD_GRAYSCALE)
-    if raw is None:
-        return None
-
+# the actual reading, on an image that is already in memory. app.py needs this because the
+# frames coming off a webcam never touch the disk
+def read_image(raw, use_preprocess=True):
     img = clean(raw) if use_preprocess else raw
     text = pytesseract.image_to_string(img, config=TESS_CFG)
 
@@ -161,12 +159,23 @@ def read_label(path, use_preprocess=True):
     # barcode always comes off the original. thresholding wrecks the thin bars
     bc = read_barcode(raw)
 
-    return {"filename": os.path.basename(path),
-            "part_no": part_no or "",
+    return {"part_no": part_no or "",
             "serial": serial or "",
             "lot_no": lot_no or "",
             "qty": qty or "",
-            "barcode": bc or ""}
+            "barcode": bc or "",
+            "text": text}
+
+
+def read_label(path, use_preprocess=True):
+    raw = cv2.imread(path, cv2.IMREAD_GRAYSCALE)
+    if raw is None:
+        return None
+
+    row = read_image(raw, use_preprocess)
+    row.pop("text")
+    row["filename"] = os.path.basename(path)
+    return row
 
 
 def read_all(use_preprocess=True, quiet=False):
