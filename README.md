@@ -3,10 +3,32 @@
 Reads component labels from photos, pulls out the part number, serial number, lot number and
 quantity, and decides which ones a person actually needs to look at.
 
-The idea is a goods-in desk. Somebody photographs a tray of parts, the tool reads every label,
-writes the good ones straight to the inventory file, and puts the doubtful ones in a separate
-file for a human. That second file is the whole point, because checking 12 labels is a lot
-quicker than checking 60.
+## The problem it solves
+
+When a delivery of parts arrives, somebody at the goods-in desk has to get what is printed on
+every label into the system. Normally that means reading each label and typing four fields, or
+scanning a barcode that only gives you the serial and still leaves the lot and quantity to type.
+It is slow, and typos in a lot number are the kind of mistake nobody notices until there is a
+recall and you cannot say which batch a part came from.
+
+So the job is not really "read text from a picture". Any OCR library does that. The job is
+deciding **which readings you can trust**, because an OCR tool that is right 96% of the time is
+useless if you still have to check all 100 rows to find the four it got wrong.
+
+That is what this is. It reads the label, then cross-examines what it read:
+
+- the barcode carries the serial as well, so the two have to agree
+- the lot number has to be one the plant actually approved
+- every field has to match the shape it is supposed to be
+- a serial that has already been scanned this session is a duplicate
+
+Anything that passes all of that goes straight into inventory and nobody looks at it. Anything
+that fails goes on a short list with the reason attached. On my test set that is 48 labels
+through and 12 held, so a person checks 12 instead of 60, and the 12 are the right 12 - all 7
+of the labels I deliberately damaged were caught, none slipped through.
+
+The accuracy number is what makes that possible. The review saving is the part that would
+actually be worth money.
 
 ## Results on my machine
 
@@ -61,6 +83,16 @@ about once a second.
 Either way you get the four fields, the barcode, whether it passed or needs a person, and why.
 The upload tab also shows the before and after of the OpenCV step, and both tabs will show you
 the raw text Tesseract handed back if you open the little arrow at the bottom.
+
+Underneath is the running log of everything scanned, which is the bit that makes it a goods-in
+desk rather than a demo. Every scan lands there with a time and an OK or CHECK, the counters at
+the top tell you how much of the shift went through untouched, and Save CSV writes the lot to
+`output/session_scans.csv`. **Add the 60 batch labels** drops the whole batch run into the same
+log so you can see the 60 from `ocr_reader.py` sitting next to anything you scan by hand.
+
+Scanning the same label twice gets you `DUPLICATE_SERIAL`, since serials are meant to be unique
+and two parts carrying one is a real problem. Holding one label in front of the camera does not
+spam the log though, the same reading inside eight seconds is treated as the same part.
 
 Hold the label flat on so it fills the frame. Printing a generated label or showing one on a
 phone screen scans best.
@@ -144,6 +176,7 @@ than 2x but pushes a batch of ten past four seconds, so 2x it is.
 | `FIELD_MISSING` | nothing came back for a field |
 | `PART_FORMAT_BAD` | part number does not look like `4471-B2` |
 | `QTY_OUT_OF_RANGE` | quantity is 0 or over 500 |
+| `DUPLICATE_SERIAL` | that serial already came through this session (app only) |
 
 It repairs two things instead of flagging them. If the barcode decoded it wins over the OCR
 serial, and if a lot number is within two edits of exactly one approved lot it gets snapped to
