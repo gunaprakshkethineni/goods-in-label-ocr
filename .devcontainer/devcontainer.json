@@ -1,0 +1,22 @@
+{
+  "name": "goods-in label ocr",
+  "image": "mcr.microsoft.com/devcontainers/python:3.12",
+
+  "// tesseract and zbar": "these are system packages, pip cannot install either of them, which is the whole reason this file exists. without it anybody opening a codespace has to know that",
+  "postCreateCommand": "sudo apt-get update && sudo apt-get install -y tesseract-ocr libzbar0 && pip install -r requirements.txt && python make_labels.py --n 60 --seed 7 && python ocr_reader.py",
+
+  "// port 5000": "app.py serves here. codespaces forwards it to a real url so the desk opens in the browser with the batch already loaded",
+  "forwardPorts": [5000],
+  "portsAttributes": {
+    "5000": {
+      "label": "goods-in desk",
+      "onAutoForward": "openPreview"
+    }
+  },
+
+  "customizations": {
+    "vscode": {
+      "extensions": ["ms-python.python", "ms-toolsai.jupyter"]
+    }
+  }
+}
