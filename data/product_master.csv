@@ -1,0 +1,408 @@
+code,product_name,brand,pack_size,category,allergens
+0039047001442,Shortbread Highlanders,Walkers,200G,biscuits,gluten|milk|nuts
+0039047011496,Pure butter shortbread,Walkers,125g,biscuits,gluten|milk|nuts|soybeans
+0061232200293,Oatcakes - Organic,Nairn's,250 g,biscuits,gluten|milk|nuts
+0061232200545,Fine Milled Oatcakes,nairn's,4 pouches of 8 o,biscuits,gluten
+0061232201047,Stem Ginger Oat Biscuits,Nairn's,200 g,biscuits,gluten
+0061232201948,Cheese Oatcakes,nairn's,200 g,biscuits,gluten|milk
+0061232202556,Dark Chocolate Chip Oat Biscuits,nairn's,200 g,biscuits,gluten|soybeans
+0061232202952,Fine Milled Oatcakes,Nairn's,218 g,biscuits,gluten
+0072417143700,Raspberry Flavor Shortcake Cookies,Jammie Dodgers,140g,biscuits,apple|gluten|milk
+0072417196379,Shortbread Fingers,Paterson's,"20 units, 300gr ",biscuits,gluten|milk
+0078895710922,16000159 LKK Pure Sesame Oil,Lee Kum Kee,207ml,vegetable-oils,Sesamolja|sesame-seeds
+0096619338696,Almond Flour Blanched,Kirkland Signature,1.36 kg,flours,Farine|nuts
+0112111211111,trail mix mountain,Eatz,284 g,nuts,milk|nuts|peanuts|soybeans
+0196633939791,Dried Mangoes,Kirkland,992 g,dried-fruits,
+0612322000202,Fruit & Seed Oatcakes,Nairn's,225 g,biscuits,gluten
+0631803000425,Medjool Dates,Sun Date,907 g,dried-fruits,
+0652655001156,Dark Chocolate Ginger,Border,150 g,chocolates,gluten|milk|soybeans
+0799439110564,Extra Virgin Cold-Pressed Avocado Oil,Pure South Press Co,250ml,vegetable-oils,
+0815074022915,Avocado Oil Spray,Chosen Foods,13.5oz,vegetable-oils,
+0832697000595,Plantain Chips Naturally Sweet,Samai,75 g,dried-fruits,
+1230000097048,HAZELNUT BUTTER DARK CHOCOLATE,Hu,60 g,chocolates,nuts
+1230000097055,ALMOND BUTTER + CRISPY QUINOA DARK CHOCO,Hu,60 g,chocolates,nuts
+1230000097062,NUT BUTTER FILLED CASHEW BUTTER + PURE V,Hu,60g,chocolates,nuts
+3045140105502,Milka Alpine Milk Chocolate Bar,Milka,100 g,chocolates,milk|nuts|soybeans
+3046920010382,Excellence Milk Sea Salt Caramel,Lindt,100 g e,chocolates,milk|soybeans
+3046920021043,Le 70% Cacao Noir Intense,Lindt,200 g,chocolates,soybeans
+3046920028417,Mint Intense Dark Chocolate,Lindt Excellence,100g,chocolates,milk|soybeans
+3046920028721,Dark absolute 99% cacao,"Lindt, LINDT SPRUNGLI SA",50 g,chocolates,milk
+3046920029674,Lindt Excellence A Touch of Sea Salt Dar,Lindt,100 g,chocolates,milk|soybeans
+3159470000120,CORN FLAKES,Kellogg's,500 g,breakfast-cereals,gluten
+3159470001424,All-Bran Fibre Plus,Kellogg's,500 g,breakfast-cereals,gluten
+3168930009078,Quaker Oats,"PEPSICO FRANCE, Quaker",550 g,breakfast-cereals,
+3178530402995,"Bonne Maman - Raspberry Tarts, 135g (4.8",Bonne Maman,135 g,biscuits,eggs|gluten|milk
+3178530413977,Galettes au bon beurre,St Michel,208 g,biscuits,eggs|gluten|milk
+4000417026002,Gianduia,Ritter Sport,100 g,chocolates,milk|nuts|soybeans
+4000417214003,Filled milk chocolate with a cocoa creme,Alfred Ritter,100 g,chocolates,gluten|milk|soybeans
+4000417670915,Pistachio,Ritter Sport,100 g,chocolates,milk|nuts|soybeans
+4000539671005,Gold Bunny,Lindt,200 g,chocolates,gluten|milk|soybeans
+4000539671104,Lindt Schokolade Goldhase,Lindt,100g,chocolates,gluten|milk|soybeans
+4016241030573,Skyr Natural Fat Free Icelandic Style Yo,Arla,450 g,yogurts,milk
+4016241040503,Skyr Vanilla Fat Free Icelandic Style Yo,Arla,450 g,yogurts,
+4033634061006,Classic 3-Seed Organic wholegrain crispb,Dr. Karg's,200 gr,nuts,gluten|sesame-seeds
+4056489017479,Extra Virgin Olive Oil,Primadonna,500ml,vegetable-oils,
+4056489017493,Mild Olive Oil,Primadonna,500ml,vegetable-oils,
+4056489033042,Hazelnuts roasted,Alesto,200g,nuts,nuts
+4056489091738,Mild olive oil,"Lidl, Primadonna",1 litre,vegetable-oils,
+4056489091936,Organic virgin coconut oil,Vita d'Or,300 ml,vegetable-oils,
+4056489102977,Extra Virgin Olive Oil,Primadonna,750ml,vegetable-oils,
+4056489105169,Alesto peanuts XXI,Alesto,1000g,nuts,peanuts
+4056489106319,Pine Nuts,Alesto,60 g,nuts,
+4056489110149,CREAMY YOGURT Peach & Passion Fruit,Milbona,1kg,yogurts,milk
+4056489135524,Sunflower Oil,Vita d'Or,1 l,vegetable-oils,
+4056489148739,Creamy Greek Style Natural Yogurt,Milbona,1kg,yogurts,milk
+4056489148975,Creamy Natural Yogurt,Milbona,500g,yogurts,milk
+4056489159506,LOW SUGAR Granola ORIGINAL,Crownfield,500g,breakfast-cereals,nuts
+4056489215226,Crema allo Zenzero,Mister Choc,400 gram,biscuits,gluten
+4056489239956,Granola Honey and Seed,Lidl,400 g,breakfast-cereals,soybeans
+4056489258346,High Protein Blueberry milk product,Lidl,200g,yogurts,milk
+4056489258353,Raspberry-Pomegranate Milk Product,Milbona,200 gram,yogurts,milk
+4056489263951,Authentic Greek Natural Yogurt 5% Fat,Milbona,500g,yogurts,milk
+4056489334538,British cold pressed rapeseed oil,"Deluxe, Lidl, Lidl Delux",500ml,vegetable-oils,
+4056489438564,"Granola coconut, cashew and almond",Crownfield,500g,breakfast-cereals,gluten|nuts
+4056489440116,Almonds,"Alesto, 04 x Lidl 07.25,",500g,nuts,nuts
+4056489467953,Strawberry Milk Product,Milbona,200g,yogurts,milk
+4056489479598,Cranberry & Raisin,Alesto,300g,dried-fruits,sulphur-dioxide-and-sulphites
+4056489479604,Dried Cranberries,Alesto,150g,dried-fruits,
+4056489491217,Skyr fat free icelandic style natural yo,Milbona,450 g,yogurts,milk
+4056489506492,Pistachios,Alesto,250 g,nuts,nuts
+4056489518273,Greek style natural yogurt,Milbona,1 kg,yogurts,milk
+4056489595830,seedless raisins,Belbake,500 g,dried-fruits,
+4056489647799,Golden syrup,Belbake,750 g,sugars,
+4056489682677,Pecan Nuts,"Alesto Selection, Lidl",180g,nuts,nuts
+4056489710592,Soft Pitted Dates,Alesto,250 g,dried-fruits,
+4056489733645,Cocoa sandwich biscuits with vanilla fla,"Lidl, Sondey",180 g,biscuits,gluten
+4056489757832,Tropical Mix,Alesto,300 g,dried-fruits,banana|nuts|peanuts|sulphur-dioxide-and-sulphites
+4056489823964,Roasted And Salted Peanuts,Alesto,400 g,nuts,peanuts
+4056489829621,Peanuts - Roasted & Salted,Alesto,500g,nuts,
+4056489851752,Lidl High Protein Greek Yog,Lidl,500g,yogurts,milk
+4056489900344,Soft Pitted Apricots,Alesto,500g,dried-fruits,sulphur-dioxide-and-sulphites
+4056489920021,Food in a Bottle Berry Island,Tasty,500 ml,yogurts,
+4056489920052,High Protein Chocolate Pudding,Milbona,460g,chocolates,milk
+4056489988342,Cornflour,Belbake,500g,flours,
+4060800310002,REFRESHING 7UP TASTE. ZERO SUGAR up ZERO,Pepsi,,sugars,
+4061459298888,Extra Virgin Olive Oil,Solesta,1L,vegetable-oils,
+4061459381702,EXTRA VIRGIN OLIVE OIL,Solesta,,vegetable-oils,
+4061459385779,Olive Oil,"Aldi, Solesta",1L,vegetable-oils,
+4061461215132,THE PANTRY SOURDOUGH BREAD MIX,Aldi,500g,flours,gluten
+4061462656125,Roasted salted cashews,"Aldi, Everday Essentials",125g,nuts,nuts|peanuts
+4061464422834,Roasted Pistachios,The Foodie Market,200g,nuts,nuts
+4088500698268,Roasted salted peanuts,Aldi,,nuts,peanuts
+4088600054537,British Cold Pressed Rapeseed Oil,"Aldi, Specially Selected",500ml,vegetable-oils,
+4088600056135,Organic Jumbo Porridge Oats,Kavanagh's,1 kg,breakfast-cereals,
+4088600060880,Greek 10% fat authentic yogurt,Brooklea,500g,yogurts,milk
+4088600060941,Greek 0% Fat Authentic Greek Yogurt,Brooklea,500g,yogurts,milk
+4088600065991,White Sourdough,Specially Selected,500g,flours,gluten
+4088600086293,Self raising flour,"Aldi, The Pantry",,flours,gluten
+4088600086309,Plain flour,Aldi,1.5kg,flours,gluten
+4088600086330,icing suger,Aldi,500 g,sugars,
+4088600086385,Granulated sugar,Aldi - The Pantry,1 kilo gram,sugars,
+4088600107998,Shortbread Fingers,Bakers Selection,,biscuits,gluten|milk
+4088600112510,Sunflower oil,Aldi,,vegetable-oils,
+4088600132334,85% Cocoa - Dark Chocolate,Moser Roth,125.0 g,chocolates,soybeans
+4088600132341,70% Dark Chocolate,Moser Roth,125.0 g,chocolates,soybeans
+4088600169934,Muesli Swiss Style,Harvest Morn,1.1kg,breakfast-cereals,gluten|milk|nuts
+4088600223612,"Dried prunes, pitted and ready to eat","Aldi, The Foodie Market",500g,dried-fruits,Not indicated.
+4088600242033,Stong White Bread Flour,Aldi,,flours,gluten
+4088600247519,Wheat bisk,Harvest morn,2 biscuits 38g,breakfast-cereals,gluten
+4088600248899,Juicy Sultanas,Aldi,500g,dried-fruits,
+4088600248905,Juicy Raisins,The Pantry,500g,dried-fruits,
+4088600268873,Dried cranberries,Aldi,150g,dried-fruits,
+4088600268880,Raisins & Cranberries,Aldi,,dried-fruits,sulphur-dioxide-and-sulphites
+4088600272672,Brazil Nuts,The Foodie Market,180g,nuts,
+4088600272689,Mixed Nuts,The Foodie Market,200g,nuts,nuts
+4088600277967,Salted Peanuts,Snackrite,400g,nuts,peanuts
+4088600277974,Dry Roasted Peanuts,Aldi,400 g,nuts,celery|peanuts
+4088600284897,Greek Style Natural Yogurt,Brooklea,1 kg,yogurts,milk
+4088600344270,Soft apricots,"Aldi, The Foodie Market",500g,dried-fruits,sulphur-dioxide-and-sulphites
+4088600391977,Puglian Extra Virgin Oil,Aldi,,vegetable-oils,
+4088600438085,Roasted Pistachios,Aldi,200g,nuts,nuts
+4088600441658,WALNUTS,THE FOODIE MARKET,200g,nuts,nuts
+4088600441672,Cashew Nuts,"Aldi, The Foodie Market",200g,nuts,nuts
+4088600441689,Almonds,The Foodie Market,,nuts,nuts|peanuts|sesame-seeds
+4088600511368,FRUIT & NUT MIX,EVERYDAY Essentials,200g,nuts,nuts|peanuts
+4088600544618,dried bananas,The Foodie Market,230 g,dried-fruits,banana
+4088600552521,Turmeric Immune Support Juice Shot,The Juice Company,100 ml,juices,
+4088600564340,RAISINS & CRANBERRIES,THE FOODIE MARKET,300g,dried-fruits,
+4088600564357,dried mango,Aldi,100,dried-fruits,
+4088600565019,Pitted Dates,Aldi,500 g,dried-fruits,
+4335619014404,Alesto Selection Roasted Hazelnuts,"Alesto, Alesto Lidl",200g,nuts,nuts
+4335619014411,Pistachios Roasted Salted,"Alesto, Lidl, Lidl Alest",200g,nuts,nuts
+4335619014480,PISTACHO TOSTADO SAL,Alesto,150g,nuts,nuts
+4335619071643,Pitted Prunes,Alesto,500 g,dried-fruits,
+4335619201859,Dubai chocolate,"J.D. Gross, R&B Food",122g,chocolates,gluten|milk|nuts
+4335619214675,Extra Virgin Coconut Oil,Vita d'Or,,vegetable-oils,
+5000108022152,PORRIDGE OATS,QUAKER,1kg,breakfast-cereals,
+5000108022176,PORAGE OATS ORIGINAL TRADITIONAL SMOOTH ,Scott's,1 kg,breakfast-cereals,
+5000108675495,Original Microwaveable Oats,Quaker,540 g,sugars,
+5000119003294,Demerara Sugar,Tesco,1 kg,sugars,
+5000119004000,Plain Flour,Tesco,1.5kg,flours,gluten
+5000119004024,Strong white flour,Tesco,"1,5 kg",flours,gluten
+5000119004048,Self Raising Flour,Tesco,1.5 kg,flours,gluten
+5000119018663,Sunflower oil,Tesco,1 l,vegetable-oils,
+5000119113252,Dark brown soft sugar,Tesco,500G,sugars,
+5000119117342,Wheat Biscuits,Tesco,24x19g,breakfast-cereals,gluten
+5000119164599,Californian Seedless Raisins,Tesco,500g,dried-fruits,
+5000119511027,Olive Oil,Tesco,1 L,vegetable-oils,
+5000119809902,Pure Vegetable Oil,Tesco,,vegetable-oils,
+5000127049307,Crunchy Nut,Kellogg's,500 g,nuts,gluten|peanuts
+5000127062092,Bran Flakes,Kellogg's,750 g,breakfast-cereals,gluten
+5000128981330,85% Cocoa Dark Chocolate,Co-op Irresistible,100 g,chocolates,
+5000159557658,Twix 10 pack,"Mars, Twix",50g,biscuits,gluten
+5000168001210,McVities Rich Tea Biscuits,McVitie's,300 g,biscuits,gluten
+5000168034928,Hobnobs,McVitie's,255 G,biscuits,gluten
+5000168036755,Digestives The ORIGINAL,McVitie's,360g,biscuits,gluten
+5000168085555,Melts Original,Carr's,150g,biscuits,gluten|milk
+5000168124643,McVitie's Rich Tea The Light One (Deligh,McVitie's,300g,biscuits,gluten|soybeans
+5000168198491,Digestive Biscuits,"McVitie's, United Biscui",400 g,biscuits,gluten|milk
+5000169567555,Dark Chocolate,Waitrose & Partners,100g,chocolates,
+5000169608036,Belgian dark chocolate,Waitrose,180g,chocolates,
+5000181039580,Icelandic Style Yogurt,Arla Skyr,1kg,yogurts,milk
+5000232828736,Sunflower oil,"Flora, Superdrug",1 l,vegetable-oils,
+5000232828750,Crisp'n Dry 100% Rapeseed Oil,Crisp -n Dry,1l,vegetable-oils,
+5000232875235,Olivio Oil,Olivio,500 ml,vegetable-oils,
+5000232879677,Olivio Oil,Olivio,1l,vegetable-oils,
+5000232919953,Napolina Extra Virgin Olive Oil 500Ml,Napolina,500 ml,vegetable-oils,
+5000234049795,Dazzling Dates,Whitworths,300g,dried-fruits,
+5000234050319,Golden Apricots,Whitworths,140g,dried-fruits,sulphur-dioxide-and-sulphites
+5000234051521,Jumbo flame raisins,Whitworths,300gm,dried-fruits,
+5000234054478,Banana chips,Whitworths,150g,dried-fruits,banana
+5000234054485,Whitworth whole cranberries,Whitworths,130 g,dried-fruits,
+5000237124673,Salt And Vinegar Flavour Peanuts,KP,225 grams,nuts,gluten|milk|peanuts|soybeans
+5000237127261,original salted peanut,KP,250g,nuts,peanuts
+5000237127285,Kp SALTED PEANUTS,KP,250g,nuts,celery|peanuts
+5000237127308,Unsalted Roasted Nuts,KP,250g,nuts,peanuts
+5000237127322,Original Salted Peanuts,KP,415 g,nuts,peanuts
+5000237127346,DRY ROASTED PEANUTS,KP,415g,nuts,celery|peanuts
+5000328228402,Sensations Coated Peanuts,Walkers,150 g,nuts,gluten|peanuts|soybeans
+5000354880162,Corn Flour,Brown & Polson,500g,flours,
+5000354911897,Plain Flour,McDougalls,1.1kg,flours,gluten
+5000436616443,Corn Flakes,TESCO,500g,breakfast-cereals,gluten
+5000436802433,crisp,Tesco,200g,vegetable-oils,milk
+5000436857112,Malt Wheats Toasty Crunch,Tesco,750 g,breakfast-cereals,gluten
+5000436872542,Mixed Nuts and Raisins,Tesco,500g,nuts,nuts|peanuts
+5000442007617,Frylight Sunflower Oil Spray 190ml,Frylight,190ml,vegetable-oils,
+5000462416772,Greek Style Yogurt,Tesco,500g,yogurts,milk
+5010024118082,Hovis Malted Brown Granary Flour 1Kg,Hovis,,flours,gluten
+5010029000016,Weetabix,Weetabix,430 g,breakfast-cereals,gluten
+5010029000061,Weetabix Original,Weetabix,430 g,breakfast-cereals,gluten
+5010029000504,Whole wheat cereal with added vitamins a,Weetabix,225 gr,breakfast-cereals,gluten
+5010029000801,Weetabix,Weetabix,860 g,breakfast-cereals,gluten
+5010029201246,Swiss Style Muesli,"Weetabix, Alpen",560g,breakfast-cereals,gluten|milk|nuts
+5010029202410,Weetabix,Weetabix,,breakfast-cereals,gluten
+5010029207880,Oatibix For A Healthy Heart,Weetabix,24 biscuits,biscuits,gluten
+5010029226133,Alpen Original Muesli,"Weetabix, Alpen",550g,breakfast-cereals,gluten|milk|nuts
+5010029226188,Muesli Recipe,Alpen,550g,breakfast-cereals,gluten|milk|nuts
+5010029229035,CRISPY MINIS CHOCOLATE CHIP,Weetabix,500 g,breakfast-cereals,gluten|soybeans
+5010029229110,Crispy minis chocolate chip,Weetabix,500g,breakfast-cereals,gluten|soybeans
+5010029231212,Muesli,Alpen,950g,breakfast-cereals,gluten|milk|nuts
+5010067301502,Granulated Sugar,Silver Spoon,1kg,sugars,
+5010067321555,Truvia | Sweetener from the Stevia Leaf,Truvia,,sugars,
+5010067321630,Truvia | Sweetener from the Stevia Leaf ,Truvia,270 g,sugars,
+5010067321708,Half Spoon,The Silver Spoon Company,1kg,sugars,
+5010067331509,Sugar,Silver spoon,1kg,sugars,
+5010067332186,Granulated Sugar,Silver Spoon,500g,sugars,
+5010067338072,Light Brown Soft Natural Unrefined Cane ,Billington's,500g,sugars,
+5010067345506,Royal icing sugar,Silver Spoon,,sugars,
+5010067349504,Icing Sugar,Silver Spoon,1kg,sugars,
+5010067371994,Allinson's very strong white bread flour,allisons,1kg,flours,gluten
+5010067990188,White Sugar,Silver Spoon,,sugars,
+5010115902941,Golden Syrup,Lyle's,454 g,sugars,
+5010115910014,Granulated Sugar,Tate+Lyle,1 kg,sugars,
+5010115924752,Dark Brown Soft Pure Cane Sugar,Tate & Lyle,500g,sugars,
+5010115926404,Granulated Sugar,Tate & Lyle,1kg,sugars,
+5010115927166,Cane Icing Sugar,Tate & Lyle,500g,sugars,
+5010338014902,Panko Breadcrumbs,"Blue Dragon, Haugen-Grup",120 g,flours,gluten
+5010477347312,Simply Granola with a hint of honey,Jordans,750g,breakfast-cereals,gluten
+5010477348630,Muesli 36% fruits noix & graines,Jordan,500 g,breakfast-cereals,Avoine|gluten|nuts
+5010477353115,Crunchy Oat Granola Raisin & Almond,Jordans,750g,breakfast-cereals,gluten|nuts
+5010477364654,Added Sugar Granola Triple Nut,Jordans,425g,breakfast-cereals,gluten|nuts
+5010651001115,Sugar - Demerara,Billington's,500.0 g,sugars,
+5010651001146,Demerara,Billington's,1kg,sugars,
+5010651001214,Light Muscavado Sugar,Billington's,500g,sugars,
+5010651001313,Dark Muscovado Sugar,Billington's,500 g,sugars,
+5010651001412,Billington's Molasses Sugar,Billington's,500 g,sugars,
+5010651001559,Golden Granulated Natural Unrefined Cane,Billington's,1kg,sugars,
+5011273015115,Pancake Syrup,Maple Crest,330g,sugars,
+5011308900935,2 Korma Paste Pots,Patak's,140 g,vegetable-oils,
+5011766001007,Organic Strong White Bread Flour imp,Doves Farm,1.5 kg,flours,gluten
+5011766010016,Plain white flour,Doves Farm,1kg,flours,gluten
+5011766010054,Wholemeal Rye Flour imp,"Doves Farm, Doves Farm O",1 kg,flours,gluten
+5011766010078,Wholemeal Spelt Flour,Doves Farm,1kg,flours,gluten
+5011766010139,Plain White Flour Free From Gluten,Doves Farm,1 kg,flours,
+5011766010146,Freee White bread flour imp,Doves farm,1kg,flours,
+5011766010184,DOVeS FARM WHITE SPELT imp,Doves farm,1kg,flours,
+5011766010672,Buckwheat flour imp,Doves farm,1kg,flours,
+5011835102390,Organic Dark Cooking Chocolate,Green & Black's,150 g,chocolates,milk
+5013635101818,100% pure coconut oil,Ktc,3.50,vegetable-oils,
+5013803001070,"low sugar granola whole grain oats, almo",EAT NATURAL,450 g,breakfast-cereals,gluten|nuts
+5014067153833,Strawberry Bio Live Yoghurt,Yeo Valley,450 g,yogurts,milk
+5015821127893,Bread Flour Strong White,Allison's,3000 g,flours,gluten
+5016887004036,"Cold Milled Flaxseed, Almonds, Brazil Nu",Linwoods,200 g,nuts,nuts
+5016887023365,"Flaxseed, almonds, brazil nuts & co-enzy",Linwoods,360,nuts,nuts
+5018357012350,Gloriously nutty muesli,dorset cereals,500g,breakfast-cereals,gluten|nuts|sulphur-dioxide-and-sulphites
+5018357012411,Simply Delicious Muesli,Dorset Cereals,650g,breakfast-cereals,gluten|nuts
+5018357012497,simply nutty muesli,dorset cereals,560 g,breakfast-cereals,gluten|nuts
+5018357012534,Simply Fruity muesli,Dorset cereals,630g,breakfast-cereals,gluten|sulphur-dioxide-and-sulphites
+5018357804764,Nutty Granola,Dorset Cereals,450g,breakfast-cereals,gluten|nuts
+5018357804849,oat granola,dorset cereals,500g,breakfast-cereals,gluten
+5018420550031,8 Chapattis,Elephant Atta,8,flours,gluten
+5020387000207,Wrights Mixed grain bread mix,Wrights,500g,flours,gluten
+5022374043778,MANGO,FOREST FEAST,650g,dried-fruits,
+5022374046663,Preda Fair Trade Dried Mango Slices,Forest Feast,100g,dried-fruits,
+5025840005447,Kefir yogurt,Grahams,,yogurts,milk
+5025840005454,Kefir Yoghurt,Graham's,350 g,yogurts,milk
+5031021361226,Soft apricots,Tesco,,dried-fruits,sulphur-dioxide-and-sulphites
+5031021679253,Extra Virgin Olive Oil,Tesco,1l,vegetable-oils,
+5035251000191,Natural Bio Yogurt,Lancashire Farm,1kg,yogurts,milk
+5036589200970,Greek style natural yoghurt,Yeo Valley,450 g,yogurts,milk
+5036589201687,Greek Style Natural Yogurt,Yeo Valley,950 g,yogurts,milk
+5036589203896,Greek Style Honey,Yeo Valley Organic,400 g,yogurts,milk
+5036589252597,"Kefir, Mango and Passion Fruit",Yeo Valley,350g,yogurts,milk
+5036589253471,Greek Recipe Strained Natural Yogurt,Yeo Valley Organic,450 g,yogurts,milk
+5036589253532,Greek Recipe,Yeo Valley,450g,yogurts,milk
+5036589254874,KEFIR MANGO & PASSION FRUIT,Yeo Valley,500 ml,yogurts,milk
+5036589255550,Yoghurt,Yeo Valley,950g,yogurts,milk
+5036589255598,Yogurt,Yeo Valley,450g,yogurts,milk
+5036589255710,Fruity favourites,Yeo Valley,4 x 85 g,yogurts,milk|peach
+5038695000062,Organic extra virgin coconut oil,"Ecover, The groovyfood c",283 ml,vegetable-oils,
+5038695000505,Organic Coconut Sugar,The Groovy Food Company,500 g,sugars,
+5050179015126,Organic Strong White Flour,Tesco,1 kg,flours,gluten
+5050854976896,Wholemeal Bread Flour,Asda,1.5kg,flours,gluten
+5051008865622,Sesame oil,Tesco,250 ml,vegetable-oils,sesame-seeds
+5052109860752,dried mango,Tesco,200g,dried-fruits,
+5052109860981,Dried cranberries,Tesco,200 g,dried-fruits,
+5052320269839,Greek Yogurt,Tesco finest,500g,yogurts,milk
+5052320564019,Unsalted Mixed Nuts,Tesco,200 g,nuts,nuts|peanuts
+5053827101424,Smacks,"Kellogg's, Smacks",400 g,breakfast-cereals,gluten
+5054269603248,Low Calorie Granulated Sweetener,tesco,75g,sugars,
+5054775980437,Tesco Virgin Organic Coconut Oil 300ML,Tesco,300 ml e,vegetable-oils,
+5054781844457,Icing Sugar o Azucar Glass,Asda,,sugars,
+5055958704161,Marmite Crunch,graze,100 g,nuts,
+5055958704215,Marmite Oven Baked Cashews,Marmite,90 g,nuts,nuts|peanuts
+5055958706301,Sweet chilli crunch,Graze,,nuts,
+5056138201807,Suckies Strawberry,The Collective,90 g,yogurts,milk
+5056215600233,Whole Chestnuts,Merchant Gourmet,,nuts,nuts
+5056269000300,Deglet Nour Dates,Date Me,200g,dried-fruits,
+5057172098897,Light brown sugar,Asda,500g,sugars,
+5057172859672,Cashews,Asda,,nuts,nuts
+5057172859696,Walnuts,Asda,200g,nuts,nuts
+5057373489593,Greek style yogurt,TESCO,1kg,yogurts,milk
+5057373546791,Walnuts,TESCO,200g,nuts,nuts
+5057373982964,Roasted Peanuts,Tesco,550 g,nuts,gluten|peanuts
+5057545696651,Roasted & Salted Peanuts,"Stockwell & Co, Tesco",200g,nuts,peanuts
+5057545756690,Sultanas,Tesco,500g,dried-fruits,
+5057753158422,BRAN FLAKES,TESCO,750g,breakfast-cereals,gluten
+5057753440176,Cornflour,Tesco,500 g,flours,
+5057753654504,Roasted & Salted Cashews,Stockwell & Co.,125g,nuts,nuts
+5059319029016,SPECIAL K The Original,Kellogg's,440g,breakfast-cereals,gluten|milk
+5059319029702,Rice Krispies,Kellogg's,430g,breakfast-cereals,gluten
+5059319030517,kelloggs corn flakes,Kellogg's,,breakfast-cereals,gluten
+5059512738814,All butter shortbread fingers,Tesco,210g,biscuits,gluten|milk
+5059697269325,DESICCATED COCONUT,TESCO,,dried-fruits,sulphur-dioxide-and-sulphites
+5059697684616,Dark Chocolate,TESCO finest,100g,chocolates,
+5059697710001,Dark milk chocolate,Tesco,100g,chocolates,milk
+5059697724855,Deglet Nour Dates,Tesco,,dried-fruits,
+5059697731860,Dark Chocolate,Tesco finest,100g,chocolates,
+5060040254622,Banana wafer,Kiddylicious,16 g,biscuits,
+5060043225353,LOW SUGAR GRANOLA Nuts & Seeds,Lizi's,,breakfast-cereals,gluten|nuts
+5060062060164,Eight Train Strong Multigrain Flour,Matthews Cotswold Flour,,flours,gluten
+5060062061581,Stoneground strong wholegrain,Matthews Cotswold Flour,1kg,flours,gluten
+5060092030977,HIGH PROTEIN GRANOLA Nuts & Seeds,Lizi's,350 g,breakfast-cereals,gluten|nuts|soybeans
+5060106170002,Mellow Yellow Rapeseed oil,Farrington Oil,500ml,vegetable-oils,
+5060127360116,Borderfields English Pressed Rapeseed Oi,Borderfields,500ml,vegetable-oils,
+5060139430241,Real Fruit YoYos,BEAR,20g,dried-fruits,
+5060139430364,Yoyos Strawberry Multipack 5 x,BEAR,5x20g,dried-fruits,apple
+5060139430913,Yoyos Apple Multipack 5 x,"Bear, Bear Nibbles",5 x 20 g,dried-fruits,none
+5060139431019,Yoyos Mango,Bear,20g,dried-fruits,apple
+5060139436564,Gently Baked Mango,Bean Fruits,35g,dried-fruits,
+5060139436618,Gently Baked Mango,Bear Fruit,100g,dried-fruits,
+5060139436625,gently baked strawberries,BEAR FRUIT,90g,dried-fruits,
+5060139436687,Gently baked mango,"Bear, Bear fruit",100g (4x25g),dried-fruits,
+5060201621805,Granola,Fuel,400 g,breakfast-cereals,gluten
+5060283763011,Proper chips,Sea salt,,flours,
+5060302580001,Organic Fair Trade Extra Virgin Raw Coco,Lucy bee,,vegetable-oils,
+5060337221931,Kefir Drink,Biotiful Dairy Ltd,1 litre,yogurts,apple|milk
+5060337222150,kefir yogurt Madagascan vanilla,Biotiful,350g,yogurts,apple
+5060337222174,kefir PROTEIN original,Biotiful gut health,250g,yogurts,milk
+5060482841565,Nutty Granola,deliciously ella,380g,breakfast-cereals,nuts
+5060719920001,Absolute black dark chocolate,GREAT BRITISH CONFECTION,90 g,chocolates,
+5060719920162,Happy Hippy 74% Cocoa Organic Orange & G,Montezuma's,90g,chocolates,
+5060719920285,Black Forest cherry dark chocolate,Montezuma's,90g,chocolates,gluten|soybeans
+5060853640032,Original Gut-Loving Prebiotic* Yoghurt,Bio & Me,350g,yogurts,milk
+5060853640049,Kefir live yogurt vanilla,Bio & Me,350g,yogurts,milk
+5060853640131,Protein granola,Bio&me,360g,breakfast-cereals,soybeans
+5070000126548,"GRANOLA LOW SUGAR, NATURALLY",Bio&Me,360g,breakfast-cereals,nuts
+5070000126579,Granola Super Nutty,Bio&Me,360g,breakfast-cereals,gluten|hazlenuts|nuts
+5099801003339,Organic Jumbo Oats,Flahavan's,1kg,breakfast-cereals,
+5201004021328,Caprice,Papadopoulos,115g,biscuits,gluten|milk|nuts|soybeans
+5201054017012,Total 0% Fat,FAGE,150g,yogurts,milk
+5201054017418,Total 0% fat,FAGE,450 g,yogurts,milk
+5201054017432,Total 5% Fat Greek Yogurt,FAGE,450 g,yogurts,milk
+5201054017517,Total 0% Fat,FAGE,950g,yogurts,milk
+5201054017531,Total 5% Fat,FAGE,950 g,yogurts,milk
+5391115000302,Yogurt Oats Strawberry,Clousters,169 g,yogurts,gluten|milk
+5410126006353,Biscoff rol chocolade,Lotus,150 g,biscuits,gluten|milk|soybeans
+5410126116236,Biscoff,Lotus,186 g,biscuits,gluten|soybeans
+5410126676037,Biscoff,Lotus,248 g,biscuits,gluten|soybeans
+5410126716016,Biscoff,Lotus,250g,biscuits,gluten|soybeans
+5410126836066,Biscoff The Original Speculoos,Lotus,750 g (6x125g),biscuits,gluten|soybeans
+5900012000232,Rapeseed oil,Kujawski,1 l,vegetable-oils,
+5900512850290,Natural Kefir,Mlekovita,1 kg,yogurts,milk
+5907069000369,Cukier puder,Diamant,250g,sugars,
+5941223000079,Zahar,Margaritar,1kg,sugars,
+5996071650648,Quick Milk Magic Sipper Sjokolade 5pk Fe,Conaxess trade norway,5 piece,sugars,
+6191509900664,Extra Virgin Olive Oil,Terra Delyssa,1 l,vegetable-oils,
+6191509900671,EXTRA VIRGIN OLIVE OIL,TERRA DELYSSA,750 ml,vegetable-oils,
+6191509900862,Organic extra virgin olive oil,Terra Delyssa,500 ml,vegetable-oils,
+6191509905058,First Cold Pressed Extra Virgin Olive Oi,Terra Delyssa,1 L,vegetable-oils,
+6413300018042,Strawberry Protein Yogurt with Sweetener,Arla,200 g,yogurts,milk
+7610400070577,CHILLI DARK,Lindtt EXCELLENCE,100 g,chocolates,Butterfat|milk|soybeans
+7610900037360,Mango Papaya Passion Fruit,Onken,450 g,yogurts,milk
+7610900299072,Onken Set Natural Yogurt,natural set yogurt,450g,yogurts,milk
+7622201148782,DAIRY MILK,Cadbury,,chocolates,milk
+7622201499679,Le Petit Beurre,LU,167 g,biscuits,gluten|milk
+7622201766375,Soft Bakes Blueberry,"Belvita, Mondelez",250g,biscuits,gluten|milk|soybeans
+7622201786373,Green & Blacks Smooth Mint,Green & Blacks,90g,chocolates,soybeans
+7622202018701,Bolachas Belvita Breakfast Milk & Cereal,Belvita,5 x 45g (225g),biscuits,gluten|milk|soybeans
+7622202019265,BREAKFAST Honey & Nut with choc chips,Belvita,1 225g,biscuits,gluten|milk|nuts|soybeans
+7622202232633,Soft Bakes Choc Chips,Belvita,,biscuits,gluten|milk|soybeans
+7622210249661,Dark Chocolate,Cadbury Bournville,180 g,chocolates,milk|soybeans
+7622210578464,Organic 70% Dark Chocolate Bar,Green & Black's,90g,chocolates,
+7622210580092,Organic Milk Chocolate 37% Cocoa,Green & Black's,90 g,chocolates,milk|soybeans
+7622210584724,INTENSE DARK 85% COCOA,GREEN & BLACK'S ORGANIC,90g,chocolates,
+7622210689382,Choc Chips,belVita BREAKFAST,225 g,biscuits,gluten|milk|soybeans
+7622210740427,belVita BREAKFAST Cocoa with choc chips,Belvita,225g,biscuits,gluten|milk|soybeans
+7622300315269,Original,Oreo,"308 g ℮, 2 pacch",biscuits,gluten|soybeans
+7622300315283,Oreo Original Night Twist,Oreo,154 g,biscuits,gluten|soybeans
+7630486400716,Icing Sugar Alternative,Pure Via,,sugars,
+8000380153442,Loacker,Loacker,90 g,biscuits,gluten|milk|nuts|soybeans
+8000500359556,czekolada Rafael,Ferrero,90 g,chocolates,milk|nuts|soybeans
+8000500417270,Eat Natural Vegan Peanuts Coconut And Da,Eat Natural,3 x 40 g,nuts,peanuts|soybeans
+8000500417539,almond & apricot with a yoghurt coating,EAT NATURAL,40g,dried-fruits,milk|nuts
+8001585008155,Wafers Bfb Hazelnut,Balconi,225 g,biscuits,gluten|milk|nuts|soybeans
+8002210115422,Organic Extra Virgin Olive Oil,Filippo Berio,500 ml,vegetable-oils,
+8002210500105,Extra Virgin Olive Oil,Filippo Berio,250 ml,vegetable-oils,
+8002210500204,Filippo Berio Extra Virgin Olive Oil imp,Filippo Berio,500 ml,vegetable-oils,
+8002210500303,Extra Virgin Olive Oil,Filippo Berio,1 l,vegetable-oils,
+8002210501201,Olive oil,Filippo Berio,500 ml,vegetable-oils,
+8002210560000,Extra Virgin Olive Oil,Filippo Berio,750 ml,vegetable-oils,
+8014601036100,Il Mulino Di Napoli Soft Wheat Flour,"Caputo, Caputo 1924, Mul",1 kg,flours,gluten
+8076809572897,Macine mb 350g int. eu,"Barilla, Mulino Bianco",350 g,biscuits,eggs|gluten|milk
+8076809574082,Abbracci con Cacao e Panna Fresca,Mulino Bianco,350 g,biscuits,eggs|gluten|milk
+8402001010873,Muesli CRUNCHY,Hacendado,500gr,breakfast-cereals,gluten|milk
+8402001018145,harina de trigo,Hacendado,1Kg,flours,
+8410179100036,Extra Virgin Olive Oil,Borges,500 ml - 17fl oz,vegetable-oils,
+8410660049981,Extra Virgin Olive Oil,La Espanola,750ml,vegetable-oils,
+8717677339914,Milk Chocolate,Tony's Chocolonely,180g,chocolates,milk|soybeans
+8717677339938,milk chocolate with caramel pieces and s,Tony's Chocolonely,180 g,chocolates,milk|soybeans
+8718226401793,Low Calorie Sweetener,Splenda,,sugars,
+8901063092853,Good Day cashew cookie,Britannia,30.2 g,biscuits,gluten|milk
+8901063162914,Marie Gold Biscuit,Britannia,64 g,biscuits,gluten|milk
+8901088050586,Parachute Coconut Oil,Parachute,,vegetable-oils,
+8901719135217,Krackjack,Parle,28.35gm,biscuits,gluten|milk
+8908002506969,BAT Shamim Dates,"BAT, Bait Al Tamur",400g,dried-fruits,
+9342985002022,Sweetener,natVia,350 g,sugars,
+9417986934839,Rice Bran Oil,AlfaOne,500 ml,vegetable-oils,
+9557129008819,Healthier Oil for Cooking (Red Palm Frui,Carotino,,vegetable-oils,

@@ -1,0 +1,8 @@
+opencv-python==5.0.0.93
+pytesseract==0.3.13
+pyzbar==0.1.9
+python-barcode==0.16.1
+pillow==12.3.0
+numpy==2.3.4
+pytest==9.1.1
+flask==3.0.3

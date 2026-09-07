@@ -1,0 +1,19 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# generated stuff, just run make_labels.py to get it back
+data/labels/
+data/labels_truth.csv
+data/run_spec.csv
+output/
+
+# data/product_master.csv is NOT ignored on purpose. it is the real catalogue off open food
+# facts and it is what everything checks against, and their api rate limits hard enough that
+# you do not want a fresh clone to depend on refetching it
+
+# other people's photographs, CC-BY-SA, fetched on demand by real_photo_test.py
+data/real_photos/
+
+# scratch files from poking at things
+_probe*
